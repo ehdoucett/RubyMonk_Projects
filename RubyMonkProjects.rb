@@ -1,3 +1,5 @@
+# You should be able to paste these code bits into the RubyMonk Primer problems for the given name and have the results pass
+
 # Build a Calculator
 
 class Calculator
