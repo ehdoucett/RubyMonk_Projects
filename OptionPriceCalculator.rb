@@ -74,7 +74,7 @@ class CallOption
 	end
 	
 	def Normal_Sample(mean = 0.0, sd = 1.0)
-		
+		# finds random sample from Normal distribution for Monte Carlo method
 		sample = 0.0
 		loop do
 			if sample == 0.0 || sample >= 1.0
@@ -92,19 +92,20 @@ class CallOption
 	
 	def ComputePriceMC(m, n)
 		# calculates price using Monte Carlo simulation with m iterations on n sub-intervals
-		m_fl = m.to_f
+		m_fl = m.to_f #convert to float for calculations
 		n_fl = n.to_f 
 		c = 0.0
 		m.times do
 			price = s 
 			n.times do 
-				x = Normal_Sample()
-				p = Math.exp((r - sigma**2 / 2.0)*(t / n_fl) + (sigma * Math.sqrt(t / n_fl) * x))
+				x = Normal_Sample() # get normal sample
+				# calculate the price change for the stock
+				p = Math.exp((r - sigma**2 / 2.0)*(t / n_fl) + (sigma * Math.sqrt(t / n_fl) * x)) 
 				price = price * p
 			end
-			c = c + [price - k, 0.0].max 
+			c = c + [price - k, 0.0].max # calculate call option price and sum up to find average
 		end
-		c = c * Math.exp(-r * t) / m_fl 
+		c = c * Math.exp(-r * t) / m_fl  # find average price from all m samples
 		return c.round(4)
 	end
 	
@@ -112,19 +113,19 @@ class CallOption
 		# method to determine reasonable number of MC iterations to use for price of option
 		# runs through different values for m, n to find price within price threshold of BS
 		bs_price = ComputePriceBS()
-		m = 1
-		n = 1
+		m = 1 # number of iterations
+		n = 1 # number of steps for stock price
 		mc_price = ComputePriceMC(m, n)
 		loop do 
 			if (mc_price - bs_price).abs <= threshold || n > 20000
-				break
+				break # end loop if threshold met or we reach too many samples
 			else
-				m = m * 2
+				m = m * 2 # increase number of samples
 				mc_price = ComputePriceMC(m, n)
 				if (mc_price - bs_price).abs <= threshold
 					break
 				end
-				n = n * 2
+				n = n * 2 # increase number of steps for stock price
 				mc_price = ComputePriceMC(m, n)
 				if (mc_price - bs_price).abs <= threshold
 					break
@@ -139,4 +140,4 @@ end
 myoption = CallOption.new(100.00,105.00,0.05,1.00,0.20) # create a new option object
 #puts myoption.ComputePriceBS # call function to compute price of option using Black Scholes model
 #puts myoption.ComputePriceMC(1000,1000) # call function to compute price of option using Monte-Carlo sampling method (might take a while)
-puts myoption.BestMC(0.15)
+puts myoption.BestMC(0.15) # call function to narrow MC price down to within the threshold specified and return number of iterations
