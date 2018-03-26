@@ -132,7 +132,7 @@ class CallOption
 				end
 			end
 		end
-		return [bs_price, mc_price, m, n, threshold]
+		return ["Black-Scholes price: " << bs_price.to_s, "Monte-Carlo price: " << mc_price.to_s, "Num MC iterations: " << m.to_s, "Num price time steps: " << n.to_s, "Minimum price difference: " << threshold.to_s]
 	end
 
 end
