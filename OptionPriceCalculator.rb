@@ -1,4 +1,6 @@
 # Call Option Price Calculator in Ruby
+# calculates the price of an option with two methods (Black-Scholes formula and Monte-Carlo simulation) and compares the results
+# used online Ruby editor at https://repl.it/languages/ruby to run the code
 
 # Call(S, t) = N(d_1)*S - N(d_2)*K*exp(-r*(t))
 #	S = current price of stock
@@ -137,7 +139,16 @@ class CallOption
 
 end
 
-myoption = CallOption.new(100.00,105.00,0.05,1.00,0.20) # create a new option object
-#puts myoption.ComputePriceBS # call function to compute price of option using Black Scholes model
-#puts myoption.ComputePriceMC(1000,1000) # call function to compute price of option using Monte-Carlo sampling method (might take a while)
-puts myoption.BestMC(0.15) # call function to narrow MC price down to within the threshold specified and return number of iterations
+# create CallOption object with input parameters
+myoption = CallOption.new(100.00,105.00,0.05,1.00,0.20) 
+
+# function to compute the price of the option using Black-Scholes model
+puts myoption.ComputePriceBS 
+
+# function to compute price using Monte-Carlo simulation, inputs are (number of samples, number of stock price changes) 
+# uses nested loops so large numbers could take awhile
+puts myoption.ComputePriceMC(1000,500)
+
+# function to input a maximum price difference between the calculation options and return the number of Monte-Carlo samples needed
+# the smaller the price difference threshold the longer this could take
+puts myoption.BestMC(0.15)
