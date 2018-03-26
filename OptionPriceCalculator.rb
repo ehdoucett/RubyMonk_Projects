@@ -150,5 +150,5 @@ puts myoption.ComputePriceBS
 puts myoption.ComputePriceMC(1000,500)
 
 # function to input a maximum price difference between the calculation options and return the number of Monte-Carlo samples needed
-# the smaller the price difference threshold the longer this could take
+# the smaller the price difference threshold the longer this could take, though sometimes it gets lucky
 puts myoption.BestMC(0.15)
